@@ -1,0 +1,61 @@
+{% extends 'enroll/base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-4"><!-- sm refers to small screens comptatibility-->
+            <h4 class="text-center alert alert-secondary">Add New Employee</h4>
+        <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}} <!-- .as_p introduces some space between the fields: as a paragraph-->
+
+            <input type="submit" value="ADD" class="btn btn-success">
+            <!--class in above line introduces colour-->
+        </form>
+
+        </div>
+
+        <div class="col-sm-8"><!-- sm refers to small screens comptatibility-->
+          {% if userData %}
+          <!--{{userData}}-->  
+          <table class="table caption-top table-hover">
+                <caption>List of users</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">PASSWORD</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in userData %}
+                  <tr>
+                    <th scope="row">{{user.id}}</th>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.password}}</td>
+                    <td>
+                      <a href="{% url 'update' user.id %}" class="btn btn-primary">Update</a>
+                      <!--<a href="$" class="btn btn-success btn-sm">Edit</a>-->
+                      <!--<a href="#" class="btn btn-danger btn-sm">Delete</a>-->
+                      <form action="{% url 'delete' user.id %}" method="post" class='d-inline'>
+                      {% csrf_token %}
+                        <input type="submit" class="btn btn-danger btn-sm" value="Delete"/>
+                      </form>
+
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                </tbody>
+          </table>
+          {% else %}
+          <h4 class="text-center alert alert-warning">No Records Found!</h6>
+
+          {% endif %}
+        </div>
+
+    </div>
+
+{% endblock content %}
